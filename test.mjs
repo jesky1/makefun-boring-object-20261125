@@ -42,6 +42,18 @@ test('validator rejects double spaces', () => {
   assert.throws(() => validateEntry('hello  world'), /double spaces/);
 });
 
+test('validator rejects entries without terminal punctuation', () => {
+  assert.throws(() => validateEntry('hello world'), /terminal punctuation/);
+});
+
+test('validator rejects URLs', () => {
+  assert.throws(() => validateEntry('see https://example.com now.'), /URL/);
+});
+
+test('validator rejects a repeated word in a row', () => {
+  assert.throws(() => validateEntry('hello hello world.'), /repeat a word/);
+});
+
 test('running main.ts twice in different dirs gives byte-identical entry.txt', () => {
   const dirA = mkdtempSync(join(tmpdir(), 'boring-a-'));
   const dirB = mkdtempSync(join(tmpdir(), 'boring-b-'));

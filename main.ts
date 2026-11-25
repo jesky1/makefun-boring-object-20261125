@@ -50,6 +50,18 @@ export function validateEntry(entry: string): void {
   if (entry.includes('  ')) {
     throw new Error('Entry must not contain double spaces.');
   }
+  if (!/[.!?]$/.test(entry)) {
+    throw new Error('Entry must end with terminal punctuation (. ! or ?).');
+  }
+  if (/https?:\/\/|www\./i.test(entry)) {
+    throw new Error('Entry must not contain a URL.');
+  }
+  const words = entry.toLowerCase().replace(/[^a-z0-9' ]/g, '').split(/\s+/);
+  for (let i = 1; i < words.length; i++) {
+    if (words[i] === words[i - 1]) {
+      throw new Error(`Entry must not repeat a word in a row ("${words[i]}").`);
+    }
+  }
 }
 
 if (import.meta.main) {
